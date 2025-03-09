@@ -1,7 +1,13 @@
 import "./App.css";
+import AppProvider from "./providers/AppProvider";
+import AppRouter from "./routes/AppRouter";
 
 function App() {
-  return <div className="text-xl">TrackPak</div>;
+  return (
+    <AppProvider>
+      <AppRouter />
+    </AppProvider>
+  );
 }
 
 export default App;
