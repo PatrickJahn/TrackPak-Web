@@ -11,4 +11,6 @@ export class AppRoutes {
 
   // Main routes
   static readonly dashboard = "/dashboard";
+  static readonly employees = "/employees";
+  static readonly orders = "/orders";
 }

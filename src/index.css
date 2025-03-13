@@ -16,11 +16,6 @@
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-
-  @apply bg-paper dark:bg-dark-paper;
+  @apply bg-paper dark:bg-dark-paper-darker font-sans;
 }
 

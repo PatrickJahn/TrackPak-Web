@@ -7,14 +7,14 @@ const palette = createPalette();
 
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
-  darkMode: "class",
+  darkMode: ["class"],
   theme: {
-    extend: {
-      colors: {
-        ...palette,
-      },
-    },
+  	extend: {
+  		colors: {
+                ...palette,
+		}
+	}
   },
-  plugins: [],
+  plugins: [require("tailwindcss-animate")],
 }
 
