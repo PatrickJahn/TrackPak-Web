@@ -3,7 +3,7 @@ import { PATH_KEYS } from "../services/appServices";
 import { useItemsCrud } from "./common/useItemsCrud";
 import { useItemService } from "./common/useServices";
 
-const useDocuments = () => {
+const useCompanies = () => {
   /**** Services ****/
   const companyService = useItemService((services) => services.companies);
 
@@ -21,4 +21,4 @@ const useDocuments = () => {
   };
 };
 
-export default useDocuments;
+export default useCompanies;

@@ -24,7 +24,7 @@ export const amber = {
 
 export const turquoise = {
   light: "#18D6BF",
-  dark: "#18D6BF",
+  dark: "#048374",
 };
 
 export const blue = {

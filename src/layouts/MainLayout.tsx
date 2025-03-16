@@ -1,6 +1,6 @@
 import SidebarNavigationProvider from "@/providers/SideBarNavigationProvider";
 import { Outlet } from "react-router-dom";
-import CityMap from "@/assets/5663353_2954444.svg";
+
 import Topbar from "@/components/sidebars/TopBar";
 const MainLayout = () => {
   return (

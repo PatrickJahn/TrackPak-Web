@@ -5,32 +5,15 @@ import DashboardView from "../views/dashboard/DashboardView";
 import { AppRoutes } from "../constants/appRoutes/appRoutes";
 import EmployeesView from "@/views/employees/EmployeesView";
 import OrdersView from "@/views/orders/OrdersView";
-
-type PrivateRouteProps = {
-  element: JSX.Element;
-  isPublic?: boolean;
-};
-
-//Allows the user to access only specific routes based on logged in status
-const PrivateRoute: FC<PrivateRouteProps> = ({ element }) => {
-  // const { isLoggedIn } = useAuth();
-
-  // if (isPublic) return isLoggedIn() ? <Navigate to={AppRoutes.home} /> : element;
-  // else return isLoggedIn() ? element : <Navigate to={AppRoutes.auth} />;
-  return element;
-};
+import Landing from "@/views/landing/Landing";
 
 const AppRouter: FC = () => {
   /**** DOM ****/
   return (
     <Routes>
-      <Route element={<MainLayout />}>
-        <Route index path={AppRoutes.dashboard} element={<DashboardView />} />
-        <Route index path={AppRoutes.employees} element={<EmployeesView />} />
-        <Route index path={AppRoutes.orders} element={<OrdersView />} />
-      </Route>
+      <Route index path={AppRoutes.index} element={<Landing />} />
 
-      <Route path="*" element={<Navigate to={AppRoutes.dashboard} />} />
+      <Route path="*" element={<Navigate to={AppRoutes.index} />} />
     </Routes>
   );
 };

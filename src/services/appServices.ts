@@ -1,4 +1,5 @@
 import CompanyServices, { CompanyServiceType } from "./companyService";
+import GeoApiService, { GeoApiServiceType } from "./geoApiService";
 import createRestClient, { RestClient } from "./restClient";
 
 export const API_ENV: string | undefined =
@@ -10,7 +11,7 @@ export const isTestingMode = API_ENV === "testing" || API_ENV === "test";
 export const isProdMode =
   API_ENV === "prod" || API_ENV === "production" || API_ENV === undefined;
 
-const LOCAL_HOST = "localhost:8000";
+const LOCAL_HOST = "localhost:5056";
 
 const HOST = LOCAL_HOST;
 
@@ -22,6 +23,7 @@ export const WS_API_BASE = `${WEBSOCKET_PROTOCOL}://${HOST}`;
 
 export type AppItemRestServicesType = {
   companies: CompanyServiceType;
+  geoApiService: GeoApiServiceType;
 };
 
 export type AppRestServicesType = {
@@ -29,7 +31,7 @@ export type AppRestServicesType = {
   readonly items: AppItemRestServicesType;
 };
 
-export const API_BASE_V1 = "/api/v1";
+export const API_BASE_V1 = "/api";
 
 export const PATH_KEYS = {
   orders: `orders`,
@@ -49,9 +51,11 @@ export const appItemServices = (
   client: RestClient
 ): AppItemRestServicesType => {
   const companies = CompanyServices(client, PATHS.companies);
+  const geoApiService = GeoApiService(client);
 
   return {
     companies,
+    geoApiService,
   };
 };
 
