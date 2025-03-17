@@ -12,7 +12,7 @@ const ProfilePopoverContent = () => {
     toggleDarkMode();
   }
 
-  function handeLogout() {
+  function handleLogout() {
     logout({
       logoutParams: {
         returnTo: window.location.origin.replace("https://", "http://admin."),
@@ -31,7 +31,7 @@ const ProfilePopoverContent = () => {
         <p> {darkMode ? "🌙 Dark Mode" : "☀️ Light Mode"}</p>
       </div>
       <span className="w-full h-[1px] bg-slate-400 rounded "></span>
-      <div className="flex gap-2 items-center p-2" onClick={handeLogout}>
+      <div className="flex gap-2 items-center p-2" onClick={handleLogout}>
         <CiLogout />
         <p>Logout</p>
       </div>
