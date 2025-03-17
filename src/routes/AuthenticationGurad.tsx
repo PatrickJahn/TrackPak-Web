@@ -10,15 +10,9 @@ type AuthenticationGuardProps = {
 export const AuthenticationGuard: FC<AuthenticationGuardProps> = ({
   component,
 }) => {
-  const { isLoading, error, logout } = useAuth0();
+  const { isLoading, error } = useAuth0();
   if (isLoading) return <LoadingView />;
-  function handleLogout() {
-    logout({
-      logoutParams: {
-        returnTo: window.location.origin.replace("https://", "http://admin."),
-      },
-    });
-  }
+
   if (error) return <ServiceUnavailableBlock />;
 
   const Component = withAuthenticationRequired(component, {
