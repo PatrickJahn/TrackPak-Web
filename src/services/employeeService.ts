@@ -1,21 +1,21 @@
-import { Company } from "../models/company/Company";
+import { Employee } from "@/models/employee/Employee";
 import { PATHS } from "./appServices";
 import { CrudServiceType, crudService } from "./crudService";
 import { RestClient } from "./restClient";
 
-export type CompanyServiceType = CrudServiceType<Company> & {
-  me: () => Promise<Company>;
+export type EmployeeServiceType = CrudServiceType<Employee> & {
+  me: () => Promise<Employee>;
 };
 
-export const CompanyServices = (
+export const EmployeeServices = (
   client: RestClient,
   path: string
-): CompanyServiceType => ({
-  ...crudService<Company>(client, path),
+): EmployeeServiceType => ({
+  ...crudService<Employee>(client, path),
 
   me: async () => {
     return await client
-      .get<Company>(PATHS.companies + "/me")
+      .get<Employee>(PATHS.companies + "/me")
       .then((res) => {
         if (res.data) return res.data;
         else throw "No data";
@@ -26,4 +26,4 @@ export const CompanyServices = (
   },
 });
 
-export default CompanyServices;
+export default EmployeeServices;

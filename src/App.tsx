@@ -1,5 +1,4 @@
 import "./App.css";
-import TrakPakLandingPage from "./views/landing/Landing";
 import AppProvider from "./providers/AppProvider";
 import AppRouter from "./routes/AppRouter";
 import AdminAppRouter from "./routes/AdminAppRouter";

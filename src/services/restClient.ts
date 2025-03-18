@@ -17,24 +17,25 @@ const createRestClient = (baseURL: string): RestClient => {
     },
   });
 
-  // Request interceptor to attach authentication tokens
-  //   apiClient.interceptors.request.use(
-  //     (config) => {
-  //       const token = localStorage.getItem("token"); // Adjust if using Cookies
-  //       if (token) {
-  //         config.headers.Authorization = `Bearer ${token}`;
-  //       }
-  //       return config;
-  //     },
-  //     (error) => Promise.reject(error)
-  //   );
+  //  Request interceptor to attach authentication tokens
+  apiClient.interceptors.request.use(
+    (config) => {
+      const token = localStorage.getItem("token"); // Adjust if using Cookies
+      console.log(token, "HAHAHAHAHA");
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+      return config;
+    },
+    (error) => Promise.reject(error)
+  );
 
   // Response interceptor for error handling
   apiClient.interceptors.response.use(
     (response) => response,
     (error: AxiosError) => {
       console.error("API Error:", error.response?.data || error.message);
-      return Promise.reject(error);
+      return error;
     }
   );
 

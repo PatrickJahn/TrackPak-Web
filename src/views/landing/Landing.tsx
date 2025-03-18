@@ -41,6 +41,10 @@ const Landing: React.FC = () => {
     }, 1000);
   }
 
+  const handleCheckout = async () => {
+    window.location.href = "https://buy.stripe.com/test_3cs4hCcHaceY2WccMM"; // Replace with your Payment Link
+  };
+
   if (isSubmitting) return <LoadingView />;
 
   return (
@@ -61,7 +65,7 @@ const Landing: React.FC = () => {
           <SubscriptionSelector
             selectedPlan={selectedPlan}
             setSelectedPlan={setSelectedPlan}
-            onConfirm={() => setShowRegistration(true)}
+            onConfirm={handleCheckout}
           />
         ) : (
           <CompanyRegistrationForm

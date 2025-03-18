@@ -17,10 +17,7 @@ export const AuthenticationGuard: FC<AuthenticationGuardProps> = ({
 
   const Component = withAuthenticationRequired(component, {
     onRedirecting: () => <LoadingView />,
-    loginOptions: {
-      appState: { company_id: "companyId" },
-      authorizationParams: { company_id: "Test" },
-    },
+    loginOptions: {},
   });
   return <Component />;
 };

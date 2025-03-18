@@ -1,6 +1,14 @@
 import { JSX, useEffect, useMemo, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { FiHome, FiUser, FiSettings, FiMoreHorizontal } from "react-icons/fi";
+import {
+  FiHome,
+  FiUser,
+  FiSettings,
+  FiMoreHorizontal,
+  FiUsers,
+  FiTruck,
+} from "react-icons/fi";
+import { FaRoute } from "react-icons/fa";
 import {
   TbLayoutSidebarLeftCollapse,
   TbLayoutSidebarLeftExpand,
@@ -53,13 +61,20 @@ const LeftSidebar = () => {
               collapsed={isCollapsed}
             />
             <SidebarItem
-              icon={<FiUser size={20} />}
+              icon={<FiTruck size={20} />}
               label="Orders"
               to="/orders"
               collapsed={isCollapsed}
             />
+
             <SidebarItem
-              icon={<FiSettings size={20} />}
+              icon={<FaRoute size={20} />}
+              label="Routes"
+              to="/routes"
+              collapsed={isCollapsed}
+            />
+            <SidebarItem
+              icon={<FiUsers size={20} />}
               label="Employees"
               to="/employees"
               collapsed={isCollapsed}

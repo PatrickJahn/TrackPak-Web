@@ -1,6 +1,9 @@
 import CompanyServices, { CompanyServiceType } from "./companyService";
+import EmployeeServices, { EmployeeServiceType } from "./employeeService";
 import GeoApiService, { GeoApiServiceType } from "./geoApiService";
+import OrderServices, { OrderServiceType } from "./orderSerivces";
 import createRestClient, { RestClient } from "./restClient";
+import UserServices, { UserServiceType } from "./userService";
 
 export const API_ENV: string | undefined =
   import.meta.env.VITE_APP_ENV || "development";
@@ -23,7 +26,10 @@ export const WS_API_BASE = `${WEBSOCKET_PROTOCOL}://${HOST}`;
 
 export type AppItemRestServicesType = {
   companies: CompanyServiceType;
+  users: UserServiceType;
+  employeeService: EmployeeServiceType;
   geoApiService: GeoApiServiceType;
+  orderService: OrderServiceType;
 };
 
 export type AppRestServicesType = {
@@ -36,15 +42,16 @@ export const API_BASE_V1 = "/api";
 export const PATH_KEYS = {
   orders: `orders`,
   locations: `locations`,
-  users: `users`,
-  employees: `employees`,
-  companies: `companies`,
+  user: `user`,
+  employees: `employee`,
+  companies: `company`,
 };
 
 export const PATHS = {
-  users: `${API_BASE_V1}/${PATH_KEYS.users}`,
+  users: `${API_BASE_V1}/${PATH_KEYS.user}`,
   orders: `${API_BASE_V1}/${PATH_KEYS.orders}`,
   companies: `${API_BASE_V1}/${PATH_KEYS.companies}`,
+  employee: `${API_BASE_V1}/${PATH_KEYS.employees}/`,
 };
 
 export const appItemServices = (
@@ -52,10 +59,16 @@ export const appItemServices = (
 ): AppItemRestServicesType => {
   const companies = CompanyServices(client, PATHS.companies);
   const geoApiService = GeoApiService(client);
+  const users = UserServices(client, PATHS.users);
+  const employeeService = EmployeeServices(client, PATHS.employee);
+  const orderService = OrderServices(client, PATHS.orders);
 
   return {
     companies,
     geoApiService,
+    users,
+    employeeService,
+    orderService,
   };
 };
 

@@ -9,19 +9,20 @@ import {
 } from "@/components/ui/table";
 import { useNotifications } from "../../providers/NotificationProvider";
 import { FiPlus } from "react-icons/fi";
+import CreateOrderDialog from "./components/Dialogs/CreateOrderDialog";
+import { useState } from "react";
 
 const OrdersView = () => {
-  const { notification } = useNotifications();
-  function test() {
-    notification.success("TEst");
-    notification.warning("TEst");
-    notification.error("TEst");
-    notification.info("TEst");
-  }
+  const [open, setOpen] = useState(false);
+
   return (
-    <div onClick={test} className="">
+    <div className="">
+      <CreateOrderDialog isOpen={open} onClose={() => setOpen(false)} />
       <div className="flex justify-end">
-        <button className="bg-primary text-white p-2 flex gap-2 items-center rounded">
+        <button
+          onClick={() => setOpen(true)}
+          className="bg-primary text-white p-2 flex gap-2 items-center rounded"
+        >
           <FiPlus size={18} />
           Create New order
         </button>

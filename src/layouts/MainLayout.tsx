@@ -2,7 +2,40 @@ import SidebarNavigationProvider from "@/providers/SideBarNavigationProvider";
 import { Outlet } from "react-router-dom";
 
 import Topbar from "@/components/sidebars/TopBar";
+import useUsers from "@/hooks/useUsers";
+import { useEffect } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
+import LoadingView from "@/views/loadiing/LoadingView";
+import useCompanies from "@/hooks/useCompanies";
+import ServiceUnavailableBlock from "@/components/errors/ServiceUnavailableBlock";
 const MainLayout = () => {
+  const { useQueryMe } = useUsers();
+  const { useQueryMyCompany } = useCompanies();
+
+  const { getAccessTokenSilently } = useAuth0();
+  const { error, isLoading } = useQueryMe();
+  const { error: companyError, isLoading: isLoadingCompany } =
+    useQueryMyCompany();
+
+  const storeTokenManually = async () => {
+    try {
+      const token = await getAccessTokenSilently();
+      localStorage.setItem("token", token); // Store with a custom key
+    } catch (error) {
+      console.error("Error fetching token:", error);
+    }
+  };
+
+  useEffect(() => {
+    storeTokenManually();
+  }, []);
+
+  if (isLoading || isLoadingCompany) return <LoadingView />;
+
+  if (error || companyError) {
+    return <ServiceUnavailableBlock />;
+  }
+
   return (
     <SidebarNavigationProvider>
       <div

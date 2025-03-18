@@ -16,7 +16,6 @@ export const GeoApiService = (client: RestClient): GeoApiServiceType => ({
     return await client
       .get<GeoApifyFeatureArray>(`${url}text=${search}&apiKey=${apiKey}`)
       .then((res) => {
-        console.log(res?.data?.features?.flatMap((x) => x.properties));
         return res?.data?.features?.flatMap((x) => x.properties) ?? [];
       });
   },
