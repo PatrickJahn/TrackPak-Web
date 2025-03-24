@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils"; // Utility for conditional classNames (if you 
 type SelectProps = {
   label?: string;
   placeholder?: string;
-  options: { label: string; value: string }[]; // Options array
+  options: { label: string; value: string | number }[]; // Options array
   icon?: LucideIcon;
   error?: string;
 } & React.SelectHTMLAttributes<HTMLSelectElement>;

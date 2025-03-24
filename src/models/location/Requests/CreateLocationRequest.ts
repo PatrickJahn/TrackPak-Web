@@ -1,6 +1,6 @@
 export type CreateLocationRequestModel = {
-  address: string;
+  addressLine: string;
   city: string;
-  zipCode: string;
+  postalCode: string;
   country: string;
 };

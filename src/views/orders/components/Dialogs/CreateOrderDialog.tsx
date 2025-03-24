@@ -4,19 +4,25 @@ import Select from "@/components/inputs/Select";
 import Textarea from "@/components/inputs/TextArea";
 import Dialog from "@/components/overlays/Dialog";
 
-import { Order, OrderItem } from "@/models/order/Order";
+import { OrderItem, OrderType } from "@/models/order/Order";
 import { FC, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { PackagePlus } from "lucide-react";
+import {
+  PackagePlus,
+  User,
+  Mail,
+  Phone,
+  MapPin,
+  MapPinHouse,
+  Flag,
+  Building2,
+} from "lucide-react";
+import { CreateOrderModel } from "@/models/order/requests/CreateOrderRequest";
+import useOrders from "@/hooks/useOrders";
+import { useNotifications } from "@/providers/NotificationProvider";
+import useCompanies from "@/hooks/useCompanies";
 
-type FormData = Order & {
-  firstName: string;
-  lastName: string;
-
-  email: string;
-  deliveryLocation: "company" | "custom";
-  address?: string;
-};
+type FormData = CreateOrderModel;
 
 type Props = {
   isOpen: boolean;
@@ -27,12 +33,18 @@ const CreateOrderDialog: FC<Props> = ({ isOpen, onClose }) => {
   const {
     register,
     handleSubmit,
-    watch,
     setValue,
-    formState: { errors },
-  } = useForm<Omit<Order, "id" | "status">>();
+    reset,
 
-  const deliveryLocation = watch("locationId");
+    formState: { errors },
+  } = useForm<FormData>();
+
+  const { create } = useOrders();
+  const { useQueryMyCompany } = useCompanies();
+
+  const { data: company } = useQueryMyCompany();
+  const { notification } = useNotifications();
+  const [showOrderItems, setShowOrderItems] = useState(false);
   const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
 
   const handleAddItem = () => {
@@ -59,6 +71,30 @@ const CreateOrderDialog: FC<Props> = ({ isOpen, onClose }) => {
     setValue("orderItems", updatedItems);
   };
 
+  async function onSubmit(data: FormData) {
+    const request: CreateOrderModel = {
+      ...data,
+      ...(orderItems ?? []),
+      companyId: company!.id,
+    };
+
+    console.log(request);
+    await create
+      .mutateAsync(request)
+      .then(() => {
+        notification.success("Order Created!");
+        onClose();
+      })
+      .catch((err) => {
+        notification.error("Could not create order! " + err);
+      });
+  }
+
+  useEffect(() => {
+    reset();
+    setOrderItems([]);
+  }, []);
+
   return (
     <Dialog
       isOpen={isOpen}
@@ -70,110 +106,187 @@ const CreateOrderDialog: FC<Props> = ({ isOpen, onClose }) => {
           <Button variant="secondary" onClick={onClose}>
             Cancel
           </Button>
-          <Button icon={PackagePlus} iconPosition="right">
+          <Button
+            onClick={handleSubmit(onSubmit)}
+            icon={PackagePlus}
+            iconPosition="right"
+          >
             Create Order
           </Button>
         </>
       }
     >
-      <form onSubmit={handleSubmit(() => {})} className="space-y-4">
-        {/* Order Type */}
-        <div>
-          <Select
-            label="Order Type"
-            {...register("type", { required: "Order type is required" })}
-            error={errors.type?.message}
-            required
-            options={[
-              { label: "Standard", value: "standard" },
-              { label: "Express", value: "express" },
-            ]}
-          />
-        </div>
+      <form className="space-y-4">
+        <div className="flex flex-col gap-2">
+          <h3 className="text-lg  font-semibold">Order information</h3>
+          <div>
+            <Select
+              label="Order Type"
+              {...register("type", { required: "Order type is required" })}
+              error={errors.type?.message}
+              onChange={(x) =>
+                setShowOrderItems(x.target.value == OrderType.Package)
+              }
+              required
+              options={Object.keys(OrderType).map((x) => ({
+                label: x,
+                value: x,
+              }))}
+            />
+          </div>
 
-        {/* Order Description */}
-        <div>
-          <Textarea
-            label="Order Description"
-            placeholder="Enter order details"
-            {...register("description", {
-              required: "Description is required",
-            })}
-          />
-        </div>
-
-        {/* Delivery Location Selection */}
-        <div>
-          <Select
-            label="Delivery Location"
-            {...register("locationId", {
-              required: "Please select a location",
-            })}
-            error={errors.locationId?.message}
-            required
-            options={[
-              { label: "Company Location", value: "company" },
-              { label: "Custom Location", value: "custom" },
-            ]}
-          />
-        </div>
-
-        {/* Show Address Field if "custom" is selected */}
-        {deliveryLocation === "custom" && (
-          <Input
-            label="Custom Address"
-            placeholder="Enter custom address"
-            {...register("description", {
-              required: "Address is required when using a custom location",
-            })}
-            error={errors.description?.message}
-          />
-        )}
-
-        {/* Order Items */}
-        <div>
-          <h3 className="text-lg  font-semibold">Order Items</h3>
-          {orderItems.map((item, index) => (
-            <div key={item.id} className="flex gap-2 mt-2 items-center">
-              <Input
-                label="Title"
-                placeholder="Item Title"
-                {...register(`orderItems.${index}.title`)}
-                value={item.title}
-                onChange={(e) =>
-                  handleItemChange(index, "title", e.target.value)
-                }
-              />
-              <Input
-                label="Price"
-                type="number"
-                placeholder="Price"
-                {...register(`orderItems.${index}.price`)}
-                value={item.price}
-                onChange={(e) =>
-                  handleItemChange(index, "price", parseFloat(e.target.value))
-                }
-              />
-              <Input
-                label="Quantity"
-                type="number"
-                placeholder="Quantity"
-                {...register(`orderItems.${index}.quantity`)}
-                value={item.quantity}
-                onChange={(e) =>
-                  handleItemChange(
-                    index,
-                    "quantity",
-                    parseInt(e.target.value, 10)
-                  )
-                }
-              />
+          {/* Order Description */}
+          <div>
+            <Textarea
+              label="Order Description"
+              placeholder="Enter order details"
+              {...register("description", {
+                required: "Description is required",
+              })}
+            />
+          </div>
+          {showOrderItems && (
+            <div>
+              <h3 className="text-lg  font-semibold">Order Items</h3>
+              {orderItems.map((item, index) => (
+                <div key={item.id} className="flex gap-2 mt-2 items-center">
+                  <Input
+                    label="Title"
+                    placeholder="Item Title"
+                    {...register(`orderItems.${index}.title`)}
+                    value={item.title}
+                    onChange={(e) =>
+                      handleItemChange(index, "title", e.target.value)
+                    }
+                  />
+                  <Input
+                    label="Price"
+                    type="number"
+                    placeholder="Price"
+                    {...register(`orderItems.${index}.price`)}
+                    value={item.price}
+                    onChange={(e) =>
+                      handleItemChange(
+                        index,
+                        "price",
+                        parseFloat(e.target.value)
+                      )
+                    }
+                  />
+                  <Input
+                    label="Quantity"
+                    type="number"
+                    placeholder="Quantity"
+                    {...register(`orderItems.${index}.quantity`)}
+                    value={item.quantity}
+                    onChange={(e) =>
+                      handleItemChange(
+                        index,
+                        "quantity",
+                        parseInt(e.target.value, 10)
+                      )
+                    }
+                  />
+                </div>
+              ))}
+              <Button
+                type="button"
+                className="mt-4"
+                onClick={handleAddItem}
+                variant="secondary"
+              >
+                + Add Item
+              </Button>
             </div>
-          ))}
-          <Button type="button" onClick={handleAddItem} variant="secondary">
-            + Add Item
-          </Button>
+          )}
         </div>
+        <div className="flex flex-col gap-2">
+          <h3 className="text-lg  font-semibold">Customer information</h3>
+          <div className="grid grid-cols-2 gap-2">
+            <Input
+              type="text"
+              label="First name"
+              icon={User}
+              placeholder="First Name"
+              {...register("user.firstName", {
+                required: "First name is required",
+              })}
+              required
+            />
+            <Input
+              type="text"
+              placeholder="Last Name"
+              label="Last name"
+              icon={User}
+              {...register("user.lastName", {
+                required: "Last name is required",
+              })}
+              required
+            />
+            <Input
+              type="text"
+              label="Email address"
+              placeholder="Email"
+              icon={Mail}
+              {...register("user.email", {
+                required: "Email is required",
+              })}
+              required
+            />
+            <Input
+              type="tel"
+              label="Phone number"
+              placeholder="Phone number"
+              icon={Phone}
+              {...register("user.phoneNumber", {})}
+            />
+          </div>
+        </div>
+        <div className="flex flex-col gap-2">
+          <h3 className="text-lg font-semibold">Location information</h3>
+          <div className="grid grid-cols-2 gap-2">
+            <Input
+              type="text"
+              label="Address"
+              placeholder="Street address"
+              icon={MapPinHouse}
+              {...register("location.addressLine", {
+                required: "Address is required",
+              })}
+              required
+            />
+            <Input
+              type="text"
+              label="City"
+              placeholder="City"
+              icon={Building2}
+              {...register("location.city", {
+                required: "City is required",
+              })}
+              required
+            />
+            <Input
+              type="text"
+              label="Zip code"
+              placeholder="Zip code"
+              icon={MapPin}
+              {...register("location.postalCode", {
+                required: "Zip code is required",
+              })}
+              required
+            />
+            <Input
+              type="text"
+              label="Country"
+              placeholder="Country"
+              icon={Flag}
+              {...register("location.country", {
+                required: "Country is required",
+              })}
+              required
+            />
+          </div>
+        </div>{" "}
       </form>
     </Dialog>
   );

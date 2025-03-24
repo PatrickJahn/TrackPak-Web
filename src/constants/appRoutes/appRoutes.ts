@@ -13,4 +13,7 @@ export class AppRoutes {
   static readonly dashboard = "/dashboard";
   static readonly employees = "/employees";
   static readonly orders = "/orders";
+
+  // Order child routes
+  static readonly order = (id: string = ":id") => `/orders/${id}`;
 }

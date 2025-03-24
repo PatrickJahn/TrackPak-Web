@@ -13,15 +13,17 @@ const Breadcrumbs = () => {
           pathAccumulator += `/${path}`;
 
           const isLast = index === paths.length - 1;
+          const isFirst = index === 0;
 
           return (
-            <span key={path}>
+            <span key={path} className="f">
               {!isLast ? (
-                <Link to={pathAccumulator} className="hover:underline">
+                <Link to={pathAccumulator} className="hover:underline ">
                   {path.charAt(0).toUpperCase() + path.slice(1)}
                 </Link>
               ) : (
-                <span className="font-semibold text-dark-paper dark:text-white">
+                <span className="font-semibold px-1 dark:text-white">
+                  {isFirst ? "" : "/"}{" "}
                   {path.charAt(0).toUpperCase() + path.slice(1)}
                 </span>
               )}

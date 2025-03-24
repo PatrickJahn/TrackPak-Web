@@ -1,6 +1,7 @@
 import CompanyServices, { CompanyServiceType } from "./companyService";
 import EmployeeServices, { EmployeeServiceType } from "./employeeService";
 import GeoApiService, { GeoApiServiceType } from "./geoApiService";
+import LocationServices, { LocationServiceType } from "./locationService";
 import OrderServices, { OrderServiceType } from "./orderSerivces";
 import createRestClient, { RestClient } from "./restClient";
 import UserServices, { UserServiceType } from "./userService";
@@ -30,6 +31,7 @@ export type AppItemRestServicesType = {
   employeeService: EmployeeServiceType;
   geoApiService: GeoApiServiceType;
   orderService: OrderServiceType;
+  locationService: LocationServiceType;
 };
 
 export type AppRestServicesType = {
@@ -41,7 +43,7 @@ export const API_BASE_V1 = "/api";
 
 export const PATH_KEYS = {
   orders: `orders`,
-  locations: `locations`,
+  locations: `location`,
   user: `user`,
   employees: `employee`,
   companies: `company`,
@@ -52,6 +54,7 @@ export const PATHS = {
   orders: `${API_BASE_V1}/${PATH_KEYS.orders}`,
   companies: `${API_BASE_V1}/${PATH_KEYS.companies}`,
   employee: `${API_BASE_V1}/${PATH_KEYS.employees}/`,
+  location: `${API_BASE_V1}/${PATH_KEYS.locations}`,
 };
 
 export const appItemServices = (
@@ -62,6 +65,7 @@ export const appItemServices = (
   const users = UserServices(client, PATHS.users);
   const employeeService = EmployeeServices(client, PATHS.employee);
   const orderService = OrderServices(client, PATHS.orders);
+  const locationService = LocationServices(client, PATHS.location);
 
   return {
     companies,
@@ -69,6 +73,7 @@ export const appItemServices = (
     users,
     employeeService,
     orderService,
+    locationService,
   };
 };
 

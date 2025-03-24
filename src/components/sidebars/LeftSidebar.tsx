@@ -151,8 +151,7 @@ const SidebarItem = ({
   collapsed: boolean;
 }) => {
   const location = useLocation();
-  const isActive = location.pathname === to; // Check if the current route matches
-
+  const isActive = location.pathname.includes(to);
   return (
     <li className="relative   ">
       <Link

@@ -6,7 +6,7 @@ export type Order = KeyedItem & {
   locationId: string;
 
   status: OrderStatus;
-  type: string;
+  type: OrderType;
   description: string;
 
   orderItems: OrderItem[];
@@ -27,3 +27,8 @@ export type OrderItem = {
   quantity: number;
   title: string;
 };
+
+export enum OrderType {
+  Service = "Service",
+  Package = "Package",
+}

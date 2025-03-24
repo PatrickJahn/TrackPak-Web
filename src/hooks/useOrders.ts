@@ -8,7 +8,7 @@ const useOrders = () => {
   const orderService = useItemService((services) => services.orderService);
 
   const ordersCrud = useItemsCrud<Order>(
-    [PATH_KEYS.companies],
+    [PATH_KEYS.orders],
     (services) => services.orderService
   );
 

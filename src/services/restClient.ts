@@ -21,7 +21,6 @@ const createRestClient = (baseURL: string): RestClient => {
   apiClient.interceptors.request.use(
     (config) => {
       const token = localStorage.getItem("token"); // Adjust if using Cookies
-      console.log(token, "HAHAHAHAHA");
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
@@ -35,7 +34,7 @@ const createRestClient = (baseURL: string): RestClient => {
     (response) => response,
     (error: AxiosError) => {
       console.error("API Error:", error.response?.data || error.message);
-      return error;
+      throw error;
     }
   );
 

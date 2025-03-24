@@ -6,6 +6,7 @@ import { AppRoutes } from "../constants/appRoutes/appRoutes";
 import EmployeesView from "@/views/employees/EmployeesView";
 import OrdersView from "@/views/orders/OrdersView";
 import AuthenticationGuard from "./AuthenticationGurad";
+import OrderView from "@/views/orders/OrderView";
 
 const AdminAppRouter: FC = () => {
   /**** DOM ****/
@@ -13,8 +14,9 @@ const AdminAppRouter: FC = () => {
     <Routes>
       <Route element={<AuthenticationGuard component={MainLayout} />}>
         <Route index path={AppRoutes.dashboard} element={<DashboardView />} />
-        <Route index path={AppRoutes.employees} element={<EmployeesView />} />
-        <Route index path={AppRoutes.orders} element={<OrdersView />} />
+        <Route path={AppRoutes.employees} element={<EmployeesView />} />
+        <Route path={AppRoutes.orders} element={<OrdersView />}></Route>
+        <Route path={AppRoutes.order(":id")} element={<OrderView />} />
       </Route>
 
       <Route path="*" element={<Navigate to={AppRoutes.dashboard} />} />
