@@ -2,18 +2,18 @@ import SidebarNavigationProvider from "@/providers/SideBarNavigationProvider";
 import { Outlet } from "react-router-dom";
 
 import Topbar from "@/components/sidebars/TopBar";
-import useUsers from "@/hooks/useUsers";
 import { useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import LoadingView from "@/views/loadiing/LoadingView";
 import useCompanies from "@/hooks/useCompanies";
 import ServiceUnavailableBlock from "@/components/errors/ServiceUnavailableBlock";
+import useEmployees from "@/hooks/useEmployees";
 const MainLayout = () => {
-  const { useQueryMe } = useUsers();
+  const { useQueryMyEmployee } = useEmployees();
   const { useQueryMyCompany } = useCompanies();
 
   const { getAccessTokenSilently } = useAuth0();
-  const { error, isLoading } = useQueryMe();
+  const { error, isLoading } = useQueryMyEmployee();
   const { error: companyError, isLoading: isLoadingCompany } =
     useQueryMyCompany();
 
